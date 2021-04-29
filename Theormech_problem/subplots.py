@@ -38,9 +38,6 @@ fig.add_trace(
 
 
 
-
-
-
 fig.update_layout(    
                     scene1 = dict(
                     xaxis = dict(nticks=4, range=[-25,25],),
@@ -65,4 +62,3 @@ fig.update_layout(
 
 
 fig.show()
-
