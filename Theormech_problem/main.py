@@ -1,49 +1,22 @@
-import numpy as np
-import plotly.graph_objs as go
+import gui
+import subplots as splts
+import graph as grph
+
+from tkinter import Tk, RIGHT, BOTH, RAISED
+from tkinter.ttk import Frame, Button, Style
 
 
-u=np.linspace(-10, 10, 500)
-v=np.linspace(-10, 10, 500)
-u,v=np.meshgrid(u,v)
-u=u.flatten()
-v=v.flatten()
+def main():
 
-x = u
-y = v
-z = np.power(x, 2) + np.power(y, 2)
+    gui.create_entry('Coeff of x')
+    gui.create_entry('Coeff of y')
+    gui.create_entry('Sqr of x')
+    gui.create_entry('Sqr of y')
 
-z1 = -2 * np.power(x, 6) + 4 * np.power(y, 8) - 4 * np.power(y, 6)
-
+    gui.data_process()
+    
+    gui.root.mainloop()
 
 
-fig = go.Figure()
-
-fig.add_trace(
-    go.Scatter3d(
-        x = x,
-        y = y,
-        z= z,
-        mode = "lines",
-        marker = dict(color = 'green', size = 10)
-
-
-    )
-)
-
-fig.add_trace(
-    go.Scatter3d(
-        x=x,
-        y=y,
-        z=z1,
-        mode = "lines",
-        marker = dict(color = 'red', size = 10)
-
-    )
-)
-
-
-
-fig.show()
-
-
-
+if __name__ == '__main__':
+    main()
