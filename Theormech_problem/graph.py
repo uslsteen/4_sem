@@ -2,11 +2,12 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import numpy as np
+import numexpr as ne
 
 # Initialize figure with 4 3D subplots
 
 
-def subplots(init_vals):
+def subplots(func_vals):
 
     fig = make_subplots(
         rows=2, cols=2,
@@ -69,7 +70,7 @@ def subplots(init_vals):
 
 
 
-def line_by_line(init_vals):
+def line_by_line(func_vals, system_eqs):
 
     u=np.linspace(-10, 10, 250)
     v=np.linspace(-10, 10, 250)
@@ -79,13 +80,12 @@ def line_by_line(init_vals):
 
     x = u
     y = v
-    z = init_vals[0] * np.power(x, init_vals[2]) + init_vals[1] * np.power(y, init_vals[3])
 
-    z1 = -2 * np.power(x, 6) + 4 * np.power(y, 8) - 4 * np.power(y, 6)
+    z = func_vals[0] * (x ** func_vals[2]) + func_vals[1] * (y ** func_vals[3])
 
+    z_deriv = (func_vals[0] * func_vals[2]) * (x ** (func_vals[2] - 1)) * ne.evaluate(system_eqs[0]) + (func_vals[1] * func_vals[3]) * (y ** (func_vals[3] - 1)) * ne.evaluate(system_eqs[1])
 
     fig = make_subplots(rows=1, cols=2)
-
 
     fig = go.Figure()
 
@@ -93,7 +93,7 @@ def line_by_line(init_vals):
     fig.add_trace(go.Scatter3d(x = x, y = y, z= z, mode = "lines",
                             marker = dict(color = 'green', size = 10)))
 
-    fig.add_trace(go.Scatter3d(x=x, y=y, z=z1, mode = "lines", 
+    fig.add_trace(go.Scatter3d(x=x, y=y, z = z_deriv, mode = "lines", 
                             marker = dict(color = 'red', size = 10)))
 
 
@@ -116,11 +116,3 @@ def line_by_line(init_vals):
     )
 
     fig.show()
-
-"""
-
-    print(init_vals['Coeff of x'])
-    print(init_vals['Coeff of y'])
-    print(init_vals['Sqr of x'])
-    print(init_vals['Sqr of y'])
-    """
