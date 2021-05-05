@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 
-from tkinter import Tk, RIGHT, BOTH, RAISED, END
+from tkinter import Tk, RIGHT, BOTH, RAISED, END, BOTTOM
 from tkinter.ttk import Frame, Button, Style, Label, Entry
+
+import graph as grph
 
 root = Tk()
 
 root.title('Анализ функции Ляпунова')
-root.geometry("800x600")
+root.geometry("300x200")
 
 frame = Frame(root)
-
-cur_row = 0
 
 
 """ creating conts """ 
@@ -26,40 +26,35 @@ system_eqs = {}
 
 def create_interface():
 
-    create_entries()
-    create_system()
+    create_entry('Коэфф. при x', func_map, 1)
+    create_entry('Коэфф. при y', func_map, 1)
+    create_entry('Степень при x', func_map, 2)
+    create_entry('Степень при y', func_map, 2)
+
+    create_entry('dx/dt = ', system_map, '2*y ** 3 - x ** 5')
+    create_entry('dy/dt = ', system_map, '-x - y ** 3 + y ** 5')
 
     
-def create_system():
-
-    create_entry('dx/dt = ', system_map)
-    create_entry('dy/dt = ', system_map)
-
-
-def create_entries():
-
-    create_entry('Coeff of x', func_map)
-    create_entry('Coeff of y', func_map)
-    create_entry('Sqr of x', func_map)
-    create_entry('Sqr of y', func_map)
-
-
-
-def create_entry(info, container):
+def create_entry(info, container, default_data = 0):
 
     entry_info = Label(root, text = info, font = ("Arial", 14))
     
     container[info] = Entry(root)
-    container[info].insert(END, 0)
+    container[info].insert(END, default_data)
 
-    entry_info.grid(column = 0, row = len(func_map) + len(system_map) - 1)
-    container[info].grid(column = 1, row = len(func_map) + len(system_map) - 1)
+    cur_row = len(func_map) + len(system_map)
+
+    entry_info.grid(column = 0, row = cur_row - 1)
+    container[info].grid(column = 1, row = cur_row - 1)
 
 
 def data_process():
 
-    accept_button = Button(root, text="Старт", command=get_data)
+    accept_button = Button(root, text="Вписать данные", command=get_data)
     accept_button.grid(column = 1, row =len(func_map) + len(system_map) + 1)
+ 
+    exit_button = Button(root, text = "Старт", command = grph.line_by_line)
+    exit_button.grid(column = 1, row =len(func_map) + len(system_map) + 2)
 
 
 def get_data():

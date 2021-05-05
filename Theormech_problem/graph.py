@@ -4,6 +4,8 @@ from plotly.subplots import make_subplots
 import numpy as np
 import numexpr as ne
 
+import gui as g
+
 # Initialize figure with 4 3D subplots
 
 
@@ -70,7 +72,7 @@ def subplots(func_vals):
 
 
 
-def line_by_line(func_vals, system_eqs):
+def line_by_line():
 
     u=np.linspace(-10, 10, 250)
     v=np.linspace(-10, 10, 250)
@@ -81,9 +83,9 @@ def line_by_line(func_vals, system_eqs):
     x = u
     y = v
 
-    z = func_vals[0] * (x ** func_vals[2]) + func_vals[1] * (y ** func_vals[3])
+    z = g.func_vals[0] * (x ** g.func_vals[2]) + g.func_vals[1] * (y ** g.func_vals[3])
 
-    z_deriv = (func_vals[0] * func_vals[2]) * (x ** (func_vals[2] - 1)) * ne.evaluate(system_eqs[0]) + (func_vals[1] * func_vals[3]) * (y ** (func_vals[3] - 1)) * ne.evaluate(system_eqs[1])
+    z_deriv = (g.func_vals[0] * g.func_vals[2]) * (x ** (g.func_vals[2] - 1)) * ne.evaluate(g.system_eqs[0]) + (g.func_vals[1] * g.func_vals[3]) * (y ** (g.func_vals[3] - 1)) * ne.evaluate(g.system_eqs[1])
 
     fig = make_subplots(rows=1, cols=2)
 
