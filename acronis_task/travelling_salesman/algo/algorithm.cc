@@ -1,5 +1,102 @@
 #include "algorithm.hh"
 
+
+void find_optim_back_way()
+{
+
+}
+
+void init_table(std::map<size_t, bool>& check_table, size_t vec_size)
+{
+    for (size_t i = 0; i < vec_size; ++i)
+        check_table[i] = false;       // mean not visited
+}
+
+bool is_final(std::map<size_t, bool>& check_table, size_t vec_size)
+{
+    bool res = true;
+
+    for (size_t i = 0; i < vec_size; ++i)
+        res &= check_table[i];
+
+    return res;
+}
+
+std::pair<int, size_t> find_min_dist(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size, size_t cur_index)
+{
+    const Row tmp_row = weights[cur_index];
+    int min_val = weights[cur_index][cur_index];
+    std::pair<int, size_t> optim_pair;
+
+    for (size_t i = 0; i < vec_size; ++i)
+    {
+        int temp = tmp_row[i];
+
+        if ((min_val == -666) && (temp != -666) && (temp != 0))
+        {
+            if (!check_table[i])
+            {
+                min_val = temp;
+                optim_pair.first = temp;
+                optim_pair.second = i;
+            }
+            else continue;
+        }
+
+        else if (temp == -666 || temp == 0)
+            continue;
+
+        else if ((temp < min_val))
+        {
+            if (!check_table[i])   // if not visited
+            {
+                min_val = temp;
+                optim_pair.first = temp;
+                optim_pair.second = i;
+            }
+            else continue;
+        }
+    }
+    return optim_pair;
+}
+void optim_way(const Matrix<int>& weights, size_t vec_size)
+{
+    std::map<size_t, bool> check_table;
+    init_table(check_table, vec_size);
+
+    int distance = 0;
+    size_t cur_index = 0;
+    bool checker = true;
+    check_table[cur_index] = true;
+
+    while(true)
+    {
+        std::pair<int, size_t> res = find_min_dist(check_table, weights, vec_size, cur_index);
+
+        size_t prev_index = cur_index;
+        cur_index = res.second;
+
+        assert(prev_index != cur_index);
+
+        distance += res.first;
+
+        check_table[cur_index] = true; //visited this vect
+
+        std::cout << prev_index << " --- >" << cur_index << ", distance_between = "
+                  << weights[prev_index][cur_index] << std::endl;
+
+        if ((checker = is_final(check_table, vec_size)))
+            break;
+    }
+
+    std::cout << "final location: " << cur_index << std::endl;
+
+    find_optim_back_way();
+}
+
+
+
+/*
 void find_min_dist(const Matrix<int>& weights, size_t vec_size, std::vector<int>& min_dist,
                                                                 std::vector<int>& visited )
 
@@ -14,7 +111,7 @@ void find_min_dist(const Matrix<int>& weights, size_t vec_size, std::vector<int>
         for (size_t i = 0; i < vec_size; i++)
         {
             // Если вершину ещё не обошли и вес меньше min
-            if ((visited[i] == 1) && (min_dist[i]<min))
+            if ((visited[i] == 1) && (min_dist[i] < min))
             {
                 // Переприсваиваем значения
                 min = min_dist[i];
@@ -107,4 +204,4 @@ int d_algo(const MX::Matrix<int>& weights, size_t vec_size)
         printf("%3d ", ver[i]);
 
     return 0;
-}
+}*/

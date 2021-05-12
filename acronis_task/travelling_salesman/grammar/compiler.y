@@ -14,7 +14,7 @@
 namespace yy { class Driver; }
 
 #include <string>
-#include "circuits.hh"
+#include "graph.hh"
 }
 
 %code

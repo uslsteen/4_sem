@@ -2,7 +2,9 @@
 #define ALGO_H_
 
 #include "../matrix/matrix.hh"
+#include <map>
 
+using namespace MX;
 
 enum helpful_const
 {
@@ -10,11 +12,14 @@ enum helpful_const
 };
 
 
-using namespace MX;
+void init_table(std::map<size_t, bool>& check_table, size_t vec_size);
 
-int d_algo(const Matrix<int>& weights, size_t vec_size);
+bool is_final(std::map<size_t, bool>& check_table, size_t vec_size);
 
-void find_min_dist(const Matrix<int>& weights, size_t vec_size, std::vector<int>& min_dist,
-                                                                std::vector<int>& visited);
+std::pair<int, size_t> find_min_dist(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size, size_t cur_index);
+
+void optim_way(const Matrix<int>& weights, size_t vec_size);
+
+void find_optim_back_way(const Matrix<int>& weights, size_t vec_size);
 
 #endif

@@ -1,8 +1,8 @@
-#include "circuits.hh"
+#include "graph.hh"
 #include "driver.hh"
 
 
-extern std::vector<CTS::Edge> Edges_;
+extern std::vector<detail::Edge> Edges_;
 
 
 

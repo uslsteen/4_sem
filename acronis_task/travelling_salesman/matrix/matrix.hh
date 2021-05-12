@@ -75,6 +75,9 @@ public:
    * @brief Function filling ctor
    * @param action Filling function/functor/lamda
    */
+
+  Matrix(size_t rows, size_t cols, DataT data);
+
   template <typename Func> Matrix(size_t rows, size_t cols, Func action);
 
   static Matrix Identity(size_t rows, size_t cols)
@@ -274,6 +277,19 @@ Matrix<DataT>::Matrix(size_t rows /* = 0 */, size_t cols /* = 0 */) : VBuf<Row<D
   for (; used_ < size_; ++used_)
     copy_construct(arr_ + used_, tmp);
 }
+
+template <typename DataT>
+Matrix<DataT>::Matrix(size_t rows, size_t cols, DataT data) : Matrix(rows, cols)
+{
+    // Matrix<DataT> tmp{rows_, cols_};
+
+    for (size_t i = 0; i < rows_; ++i)
+        for (size_t j = 0; j < cols_; ++j)
+            /*tmp.*/ set(i, j, data);
+
+    /*swap(tmp);*/
+}
+
 
 template <typename DataT>
 template <typename Func>

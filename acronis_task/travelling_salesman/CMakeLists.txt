@@ -43,8 +43,7 @@ add_executable(${TRAVELLER}
   ${FLEX_flex_o_OUTPUTS}
   driver/driver.cc
   parser/parser.cc
-  matrix/matrix.cc
-  circuits/circuits.cc
+  graph/graph.cc
   algo/algorithm.cc
 )
 
@@ -61,7 +60,7 @@ foreach(TARGET ${TARGETS})
   target_include_directories(${TARGET} PRIVATE driver) 
   target_include_directories(${TARGET} PRIVATE parser)
   target_include_directories(${TARGET} PRIVATE matrix)
-  target_include_directories(${TARGET} PRIVATE circuits)
+  target_include_directories(${TARGET} PRIVATE graph)
   target_include_directories(${TARGET} PRIVATE algo)
 
   # Specify compiler options for debug and release

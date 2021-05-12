@@ -1,6 +1,6 @@
 #include "driver.hh"
 
-std::vector<CTS::Edge> Edges_{};
+std::vector<detail::Edge> Edges_{};
 
 //! Constructor for class Driver
 //! \param name_of_file - the name of the file from which our program is read
@@ -23,13 +23,14 @@ bool yy::Driver::parse()
   size_t e_num = Edges_.size();
 
   /* filling weights matrix */
-  weights_ = MX::Matrix<int>{max_junc_, max_junc_};
+  weights_ = MX::Matrix<int>{max_junc_, max_junc_, -666};
 
   for (size_t i = 0; i < e_num; ++i)
   {
     size_t vert1 = juncs[Edges_[i].junc1], vert2 = juncs[Edges_[i].junc2];
 
     weights_.set(vert1, vert2, Edges_[i].weight);
+    weights_.set(vert2, vert1, Edges_[i].weight);
   }
 
   std::cout << weights_;
@@ -40,7 +41,7 @@ bool yy::Driver::parse()
 void yy::Driver::solve()
 {
   
-  d_algo(weights_, max_junc_);
+  optim_way(weights_, max_junc_);
 /*
   try
   {
