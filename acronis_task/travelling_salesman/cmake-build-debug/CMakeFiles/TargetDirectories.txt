@@ -1,3 +1,0 @@
-/home/anon/Code/4sem/acronis_task/travelling_salesman/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/anon/Code/4sem/acronis_task/travelling_salesman/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/anon/Code/4sem/acronis_task/travelling_salesman/cmake-build-debug/CMakeFiles/Travelleri.dir
