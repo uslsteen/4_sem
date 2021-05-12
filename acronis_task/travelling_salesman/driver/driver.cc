@@ -6,7 +6,7 @@ std::vector<CTS::Edge> Edges_{};
 //! \param name_of_file - the name of the file from which our program is read
 yy::Driver::Driver() : plex_(new OurFlexLexer)
 {
-  plex_->switch_streams(std::cin, std::cout);
+  plex_->switch_streams(ifs, std::cout);
 }
 
 //! Functuion for calling bison yy::parser:parse()
@@ -15,7 +15,7 @@ bool yy::Driver::parse()
 {
   yy::parser parser_(this);
 
-  if (parser_.parse())
+  if (parser_.parse()) 
     return false;
 
   max_junc_ = juncs.size();
@@ -28,8 +28,9 @@ bool yy::Driver::parse()
   for (size_t i = 0; i < e_num; ++i)
   {
     size_t vert1 = juncs[Edges_[i].junc1], vert2 = juncs[Edges_[i].junc2];
+    //weights_[vert1 - 1][vert2] = Edges_[i].weight;
 
-    weights_.set(vert1 - 1, vert2 - 1, Edges_[i].weight);
+    weights_[vert1 - 1].set(vert2 - 1, Edges_[i].weight);
   }
 
   return true;
@@ -99,13 +100,10 @@ void yy::Driver::insert(size_t junc1, size_t junc2, int weight)
 {
   //! Insertion new edge to structure
 
-/*
-  if (!juncs.contains(junc1))
+  if (juncs.find(junc1) == juncs.end())
     juncs[junc1] = juncs.size();
-  if (!juncs.contains(junc2))
+  if (juncs.find(junc2) == juncs.end())
     juncs[junc2] = juncs.size();
-*/
-  juncs[junc1] = junc2;
 
   Edges_.emplace_back(junc1, junc2, weight);
 }

@@ -35,9 +35,7 @@ private:
   OurFlexLexer *plex_; // maybe this is good name
   std::vector<std::string> lines_of_prog;
 
-  MX::Matrix<int> incidence_;
-  MX::Matrix<double> resistance_;
-  MX::Matrix<double> eds_;
+  std::ifstream ifs{"../test/in/1.dat"};
 
   MX::Matrix<int> weights_;
 
