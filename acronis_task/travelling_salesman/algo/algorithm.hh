@@ -20,6 +20,9 @@ std::pair<int, size_t> find_min_dist(std::map<size_t, bool>& check_table, const 
 
 void optim_way(const Matrix<int>& weights, size_t vec_size);
 
-void find_optim_back_way(const Matrix<int>& weights, size_t vec_size);
+void find_optim_back_way(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size);
+
+std::pair<int, size_t> find_min_elem(std::map<int, size_t> check_table, const Row<int>& row, size_t vec_size, int min_val);
+
 
 #endif
