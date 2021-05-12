@@ -11,6 +11,7 @@
 
 #include "matrix.hh"
 #include "parser.hh"
+#include "algorithm.hh"
 
 #ifndef yyFlexLexer
 #include <FlexLexer.h>
@@ -28,7 +29,6 @@ class Driver final
 {
 private:
   std::unordered_map<size_t, size_t> juncs;
-  std::unordered_set<size_t> unique_juncs_with_loops;
 
   size_t max_junc_{0};
 
@@ -57,10 +57,6 @@ public:
   void report_syntax_error(const parser::context &ctx);
 
   void dump() const;
-
-  void print_curs(const MX::Matrix<double> &curs);
-
-  int d_algo(const MX::Matrix<int>& weights, size_t vec_size);
 
   ~Driver();
 };

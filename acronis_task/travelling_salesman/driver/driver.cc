@@ -22,16 +22,17 @@ bool yy::Driver::parse()
 
   size_t e_num = Edges_.size();
 
-  /* filling incidence matrix */
+  /* filling weights matrix */
   weights_ = MX::Matrix<int>{max_junc_, max_junc_};
 
   for (size_t i = 0; i < e_num; ++i)
   {
     size_t vert1 = juncs[Edges_[i].junc1], vert2 = juncs[Edges_[i].junc2];
-    //weights_[vert1 - 1][vert2] = Edges_[i].weight;
 
-    weights_[vert1 - 1].set(vert2 - 1, Edges_[i].weight);
+    weights_.set(vert1, vert2, Edges_[i].weight);
   }
+
+  std::cout << weights_;
 
   return true;
 }
@@ -49,15 +50,6 @@ void yy::Driver::solve()
   {
     std::cerr << "I CAN'T CALCULATE THIS CIRCUIT, SORRY :'(" << std::endl;
   }*/
-}
-
-void yy::Driver::print_curs(const MX::Matrix<double> &curs)
-{
-  for (size_t i = 0, end = curs.rows(); i < end; ++i)
-    Edges_[i].cur = curs[i][0];
-
-  for (auto &&edge : Edges_)
-    std::cout << edge;
 }
 
 //! The lexical analyzer function, yylex, recognizes tokens from the input stream and returns them to the parser.
@@ -154,11 +146,12 @@ void yy::Driver::report_syntax_error(const parser::context &ctx)
   std::cerr << std::endl;
 }
 
+
 void yy::Driver::dump() const
 {
   for (auto &&edge : Edges_)
   {
-    std::cout << edge.junc1 << "--" << edge.junc2 << ", " << edge.rtor << "; " << edge.eds << "V";
+    std::cout << edge.junc1 << "--" << edge.junc2 << ", " << edge.weight;
     std::cout << std::endl;
   }
 }
@@ -169,102 +162,3 @@ yy::Driver::~Driver()
   delete plex_;
 }
 
-int yy::Driver::d_algo(const MX::Matrix<int>& weights, size_t vec_size)
-{
-    int min_dist[vec_size]; // минимальное расстояние
-    int visited[vec_size]; // посещенные вершины
-
-    //std::cout << vec_size << std::endl;
-
-    int temp = 0, minindex = 0, min = 0;
-
-    int begin_index = 0;
-
-
-    //Инициализация вершин и расстояний
-    for (size_t i = 0; i < vec_size ; i++)
-    {
-        min_dist[i] = 10000;
-        visited[i] = 1;
-    }
-
-    min_dist[begin_index] = 0;
-
-    // Шаг алгоритма
-    do {
-    minindex = 10000;
-
-    min = 10000;
-    for (size_t i = 0; i < vec_size; i++)
-    {   
-        // Если вершину ещё не обошли и вес меньше min
-        if ((visited[i] == 1) && (min_dist[i]<min))
-        { 
-            // Переприсваиваем значения
-            min = min_dist[i];
-            minindex = i;
-        }
-    }
-
-    // Добавляем найденный минимальный вес
-    // к текущему весу вершины
-    // и сравниваем с текущим минимальным весом вершины
-
-    if (minindex != 10000)
-    {
-        for (size_t i = 0; i < vec_size; i++)
-        {
-            if (weights[minindex][i] > 0)
-            {
-                temp = min + weights[minindex][i];
-
-                if (temp < min_dist[i])
-                    min_dist[i] = temp;  
-            }
-        }
-
-        visited[minindex] = 0;
-    }
-    } while (minindex < 10000);
-
-    // Вывод кратчайших расстояний до вершин
-    printf("\nКратчайшие расстояния до вершин: \n");
-
-    for (size_t i = 0; i < vec_size ; i++)
-    printf("%5d ", min_dist[i]);
-
-    // Восстановление пути
-    int ver[vec_size]; // массив посещенных вершин
-    int end = 4; // индекс конечной вершины = 5 - 1
-    ver[0] = end + 1; // начальный элемент - конечная вершина
-    int k = 1; // индекс предыдущей вершины
-    int weight = min_dist[end]; // вес конечной вершины
-
-    while (end != begin_index) // пока не дошли до начальной вершины
-    {
-        for (size_t i = 0; i < vec_size; i++) // просматриваем все вершины
-        {
-            if (weights[i][end] != 0)   // если связь есть
-            {
-                int temp = weight - weights[i][end]; // определяем вес пути из предыдущей вершины
-
-                if (temp == min_dist[i])                   // если вес совпал с рассчитанным
-                {                 // значит из этой вершины и был переход
-                    weight = temp; // сохраняем новый вес
-                    end = i;       // сохраняем предыдущую вершину
-                    ver[k] = i + 1; // и записываем ее в массив
-                    k++;
-                }
-            }
-        }
-    }
-
-    // Вывод пути (начальная вершина оказалась в конце массива из k элементов)
-    printf("\nВывод кратчайшего пути\n");
-
-    for (int i = k - 1; i >= 0; i--)
-        printf("%3d ", ver[i]);
-
-    getchar(); getchar();
-    return 0;
-}

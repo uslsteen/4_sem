@@ -1,13 +1,56 @@
 #include "algorithm.hh"
 
+void find_min_dist(const Matrix<int>& weights, size_t vec_size, std::vector<int>& min_dist,
+                                                                std::vector<int>& visited )
 
-int d_algo(const Matrix<int>& weights, size_t vec_size)
 {
-    int min_dist[vec_size]; // минимальное расстояние
-    int visited[vec_size]; // посещенные вершины
-
-
     int temp = 0, minindex = 0, min = 0;
+
+    do
+    {
+        minindex = VERY_BIG_VALUE;
+        min = VERY_BIG_VALUE;
+
+        for (size_t i = 0; i < vec_size; i++)
+        {
+            // Если вершину ещё не обошли и вес меньше min
+            if ((visited[i] == 1) && (min_dist[i]<min))
+            {
+                // Переприсваиваем значения
+                min = min_dist[i];
+                minindex = i;
+            }
+        }
+
+        // Добавляем найденный минимальный вес
+        // к текущему весу вершины
+        // и сравниваем с текущим минимальным весом вершины
+
+        if (minindex != VERY_BIG_VALUE)
+        {
+            for (size_t i = 0; i < vec_size; i++)
+            {
+                if (weights[minindex][i] > 0)
+                {
+                    temp = min + weights[minindex][i];
+
+                    if (temp < min_dist[i])
+                        min_dist[i] = temp;
+                }
+            }
+
+            visited[minindex] = 0;
+        }
+    } while (minindex < VERY_BIG_VALUE);
+}
+
+int d_algo(const MX::Matrix<int>& weights, size_t vec_size)
+{
+    std::vector<int> min_dist;
+    min_dist.reserve(vec_size); // минимальное расстояние
+
+    std::vector<int> visited;
+    visited.reserve(vec_size);  // посещенные вершины
 
     int begin_index = 0;
 
@@ -15,59 +58,26 @@ int d_algo(const Matrix<int>& weights, size_t vec_size)
     //Инициализация вершин и расстояний
     for (size_t i = 0; i < vec_size ; i++)
     {
-        min_dist[i] = 10000;
+        min_dist[i] = VERY_BIG_VALUE;
         visited[i] = 1;
     }
 
     min_dist[begin_index] = 0;
 
     // Шаг алгоритма
-    do {
-    minindex = 10000;
-
-    min = 10000;
-    for (size_t i = 0; i< vec_size; i++)
-    {   
-        // Если вершину ещё не обошли и вес меньше min
-        if ((visited[i] == 1) && (min_dist[i]<min))
-        { 
-            // Переприсваиваем значения
-            min = min_dist[i];
-            minindex = i;
-        }
-    }
-
-    // Добавляем найденный минимальный вес
-    // к текущему весу вершины
-    // и сравниваем с текущим минимальным весом вершины
-
-    if (minindex != 10000)
-    {
-        for (size_t i = 0; i < vec_size; i++)
-        {
-            if (weights[minindex][i] > 0)
-            {
-                temp = min + weights[minindex][i];
-
-                if (temp < min_dist[i])
-                    min_dist[i] = temp;  
-            }
-        }
-
-        visited[minindex] = 0;
-    }
-    } while (minindex < 10000);
-
+    find_min_dist(weights, vec_size, min_dist, visited);
     // Вывод кратчайших расстояний до вершин
     printf("\nКратчайшие расстояния до вершин: \n");
 
     for (size_t i = 0; i < vec_size ; i++)
-    printf("%5d ", min_dist[i]);
+        printf("%5d ", min_dist[i]);
 
     // Восстановление пути
     int ver[vec_size]; // массив посещенных вершин
     int end = 4; // индекс конечной вершины = 5 - 1
+
     ver[0] = end + 1; // начальный элемент - конечная вершина
+
     int k = 1; // индекс предыдущей вершины
     int weight = min_dist[end]; // вес конечной вершины
 
@@ -96,6 +106,5 @@ int d_algo(const Matrix<int>& weights, size_t vec_size)
     for (int i = k - 1; i >= 0; i--)
         printf("%3d ", ver[i]);
 
-    getchar(); getchar();
     return 0;
 }

@@ -17,15 +17,13 @@ struct Edge final // rtor, junc1, junc2, voltage
 
   int weight;
 
-  double rtor, eds, cur;
-
   Edge(size_t j1, size_t j2, int w) : junc1(j1), junc2(j2), weight(w)
   {
   }
 
   double get_cur() const
   {
-    return MX::is_zero(cur) ? 0.0 : cur;
+    //return MX::is_zero(cur) ? 0.0 : cur;
   }
 };
 
