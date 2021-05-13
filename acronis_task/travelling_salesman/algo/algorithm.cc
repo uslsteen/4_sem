@@ -1,15 +1,16 @@
 #include "algorithm.hh"
 
 
+namespace detail
+{
 
-
-void init_table(std::map<size_t, bool>& check_table, size_t vec_size)
+void AlgoHandler::init_table()
 {
     for (size_t i = 0; i < vec_size; ++i)
         check_table[i] = false;       // mean not visited
 }
 
-bool is_final(std::map<size_t, bool>& check_table, size_t vec_size)
+bool AlgoHandler::is_final()
 {
     bool res = true;
 
@@ -19,7 +20,7 @@ bool is_final(std::map<size_t, bool>& check_table, size_t vec_size)
     return res;
 }
 
-std::pair<int, size_t> find_min_elem(std::map<size_t, bool>& check_table, const Row<int>& row, size_t vec_size, int min_val)
+std::pair<int, size_t> AlgoHandler::find_min_elem(const Row<int>& row, int min_val)
 {
     std::pair<int, size_t> optim_pair;
 
@@ -27,7 +28,7 @@ std::pair<int, size_t> find_min_elem(std::map<size_t, bool>& check_table, const 
     {
         int temp = row[i];
 
-        if ((min_val == -666) && (temp != -666) && (temp != 0))
+        if ((min_val == INIT_VALUE) && (temp != INIT_VALUE) && (temp != 0))
         {
             if (!check_table[i])
             {
@@ -38,7 +39,7 @@ std::pair<int, size_t> find_min_elem(std::map<size_t, bool>& check_table, const 
             else continue;
         }
 
-        else if (temp == -666 || temp == 0)
+        else if (temp == INIT_VALUE || temp == 0)
             continue;
 
         else if ((temp < min_val))
@@ -57,17 +58,18 @@ std::pair<int, size_t> find_min_elem(std::map<size_t, bool>& check_table, const 
 
 
 
-void find_optim_back_way(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size, size_t src_ind)
+
+void AlgoHandler::find_optim_back_way(size_t src_ind)
 {
 
     if (weights[src_ind][0] != 0)
     {
-        init_table(check_table, vec_size);
+        init_table();
         size_t dest_index = 0;
         int min_val = weights[dest_index][dest_index];
         const Row<int> tmp_row = weights[dest_index];
 
-        std::pair<int, size_t> res = find_min_elem(check_table, tmp_row, vec_size, min_val);
+        std::pair<int, size_t> res = find_min_elem(tmp_row, min_val);
 
         if (weights[src_ind][dest_index] == res.first)
             std::cout << src_ind << " ---> " << dest_index << ", " << "distance_between = "
@@ -91,26 +93,28 @@ void find_optim_back_way(std::map<size_t, bool>& check_table, const Matrix<int>&
     }
 }
 
-std::pair<int, size_t> find_min_dist(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size, size_t cur_index)
+std::pair<int, size_t> AlgoHandler::find_min_dist(size_t cur_index)
 {
     const Row<int> tmp_row = weights[cur_index];
     int min_val = weights[cur_index][cur_index];
 
-    return find_min_elem(check_table, tmp_row, vec_size, min_val);
+    return find_min_elem(tmp_row, min_val);
 }
-void optim_way(const Matrix<int>& weights, size_t vec_size)
+
+
+void AlgoHandler::optim_way()
 {
-    std::map<size_t, bool> check_table;
-    init_table(check_table, vec_size);
+    init_table();
 
     int distance = 0;
     size_t cur_index = 0;
+
     bool checker = true;
     check_table[cur_index] = true;
 
     while(true)
     {
-        std::pair<int, size_t> res = find_min_dist(check_table, weights, vec_size, cur_index);
+        std::pair<int, size_t> res = find_min_dist(cur_index);
 
         size_t prev_index = cur_index;
         cur_index = res.second;
@@ -124,12 +128,20 @@ void optim_way(const Matrix<int>& weights, size_t vec_size)
         std::cout << prev_index << " --- >" << cur_index << ", distance_between = "
                   << weights[prev_index][cur_index] << std::endl;
 
-        if ((checker = is_final(check_table, vec_size)))
+        if ((checker = is_final()))
             break;
     }
 
     std::cout << "final location: " << cur_index << std::endl;
 
-    find_optim_back_way(check_table, weights, vec_size, cur_index);
+    //find_optim_back_way(weights, vec_size, cur_index);
 }
 
+
+
+void AlgoHandler::solve()
+{
+    optim_way();
+}
+
+}

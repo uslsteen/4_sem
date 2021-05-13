@@ -6,23 +6,53 @@
 
 using namespace MX;
 
+namespace detail
+{
+
 enum helpful_const
 {
-    VERY_BIG_VALUE = 10000
+    VERY_BIG_VALUE = 10000,
+    INIT_VALUE = -666
 };
 
 
-void init_table(std::map<size_t, bool>& check_table, size_t vec_size);
+class AlgoHandler final
+{
+private:
 
-bool is_final(std::map<size_t, bool>& check_table, size_t vec_size);
+    std::map<size_t, bool> check_table{};
+    const Matrix<int> weights;
 
-std::pair<int, size_t> find_min_dist(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size, size_t cur_index);
+    size_t vec_size;
 
-void optim_way(const Matrix<int>& weights, size_t vec_size);
+public:
 
-void find_optim_back_way(std::map<size_t, bool>& check_table, const Matrix<int>& weights, size_t vec_size);
+    AlgoHandler(const Matrix<int>& weights__, size_t vec_size__) : weights(Matrix{weights__}), vec_size(vec_size__)
+    {
 
-std::pair<int, size_t> find_min_elem(std::map<int, size_t> check_table, const Row<int>& row, size_t vec_size, int min_val);
+    }
 
+    ~AlgoHandler() = default;
+
+public:
+
+    void solve(); 
+
+private:
+
+    void init_table();
+
+    bool is_final();
+
+    std::pair<int, size_t> find_min_dist(size_t cur_index);
+
+    void optim_way();
+
+    void find_optim_back_way(size_t src_ind);
+
+    std::pair<int, size_t> find_min_elem(const Row<int>& row, int min_val);
+};
+
+}
 
 #endif

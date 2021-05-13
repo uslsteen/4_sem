@@ -40,17 +40,11 @@ bool yy::Driver::parse()
 
 void yy::Driver::solve()
 {
-  
-  optim_way(weights_, max_junc_);
-/*
-  try
-  {
-    print_curs(crc.curs_calc());
-  }
-  catch (const MX::rank_lack &er)
-  {
-    std::cerr << "I CAN'T CALCULATE THIS CIRCUIT, SORRY :'(" << std::endl;
-  }*/
+  detail::AlgoHandler handler{weights_, max_junc_};
+
+  handler.solve();
+
+  //optim_way(weights_, max_junc_);
 }
 
 //! The lexical analyzer function, yylex, recognizes tokens from the input stream and returns them to the parser.
