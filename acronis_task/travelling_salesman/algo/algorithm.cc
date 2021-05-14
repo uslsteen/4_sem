@@ -133,7 +133,7 @@ void AlgoHandler::print_optim_way(size_t src_ind, size_t dest_ind, int dist)
 
 void AlgoHandler::find_optim_back_way(size_t src_ind)
 {
-    std::vector<int> min_dists = d_algo();
+    std::vector<int> min_dists = dijikstra_algo();
     size_t dest_ind = 0;
     int cur_dist = weights[src_ind][dest_ind];
     int min_dist = min_dists[1];

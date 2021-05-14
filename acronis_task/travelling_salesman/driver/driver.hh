@@ -50,9 +50,6 @@ public:
   void solve();
 
   void insert(size_t junc1, size_t junc2, int weight);
-3 -- 5: 12
-4 -- 5: 34
-
 
   parser::token_type yylex(parser::semantic_type *yylval, parser::location_type *yylloc);
 
