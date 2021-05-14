@@ -12,7 +12,8 @@ namespace detail
 enum helpful_const
 {
     VERY_BIG_VALUE = 10000,
-    INIT_VALUE = -666
+    INIT_VALUE = -666,
+    NOT_VISITED = 1
 };
 
 
@@ -51,6 +52,10 @@ private:
     void find_optim_back_way(size_t src_ind);
 
     std::pair<int, size_t> find_min_elem(const Row<int>& row, int min_val);
+
+    std::vector<int> dijikstra_algo();
+
+    void print_optim_way(size_t src_ind, size_t dest_ind, int dist);
 };
 
 }

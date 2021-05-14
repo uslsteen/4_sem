@@ -35,8 +35,7 @@ private:
   OurFlexLexer *plex_; // maybe this is good name
   std::vector<std::string> lines_of_prog;
 
-  std::ifstream ifs{"../test/in/1.dat"};
-
+  std::ifstream ifs{"../test/in/3.dat"};
   MX::Matrix<int> weights_;
 
 public:
@@ -51,6 +50,9 @@ public:
   void solve();
 
   void insert(size_t junc1, size_t junc2, int weight);
+3 -- 5: 12
+4 -- 5: 34
+
 
   parser::token_type yylex(parser::semantic_type *yylval, parser::location_type *yylloc);
 

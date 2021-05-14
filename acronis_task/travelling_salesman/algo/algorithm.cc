@@ -4,6 +4,72 @@
 namespace detail
 {
 
+std::vector<int> AlgoHandler::dijikstra_algo()
+{
+    std::vector<int> min_dists(vec_size);
+    std::vector<int> visited(vec_size);
+
+    int temp = 0, minindex = 0, min = 0;
+    int begin_index = 0;
+
+
+    //Инициализация вершин и расстояний
+    for (size_t i = 0; i<vec_size; i++)
+    {
+        min_dists[i] = VERY_BIG_VALUE;
+        visited[i] = NOT_VISITED;
+    }
+
+    min_dists[begin_index] = 0;
+
+    // Шаг алгоритма
+    do 
+    {
+        
+        minindex = VERY_BIG_VALUE;
+        min = VERY_BIG_VALUE;
+        
+        for (size_t i = 0; i<vec_size; i++)
+        { 
+            // Если вершину ещё не обошли и вес меньше min
+            if ((visited[i] == NOT_VISITED) && (min_dists[i]<min))
+            { 
+                // Переприсваиваем значения
+                min = min_dists[i];
+                minindex = i;
+            }
+        }
+
+        // Добавляем найденный минимальный вес
+        // к текущему весу вершины
+        // и сравниваем с текущим минимальным весом вершины
+
+        if (minindex != VERY_BIG_VALUE)
+        {
+            for (size_t i = 0; i<vec_size; i++)
+            {
+                if (weights[minindex][i] > 0)
+                {
+                    temp = min + weights[minindex][i];
+
+                    if (temp < min_dists[i])
+                        min_dists[i] = temp;  
+                }
+            }
+
+            visited[minindex] = 0;
+        }
+    } while (minindex < VERY_BIG_VALUE);
+
+    // Вывод кратчайших расстояний до вершин
+    std::cout << "\nКратчайшие расстояния до вершин: \n";
+
+    for (auto&& elem : min_dists)
+        std::cout << elem << " ";
+
+    return min_dists;
+}
+
 void AlgoHandler::init_table()
 {
     for (size_t i = 0; i < vec_size; ++i)
@@ -57,40 +123,50 @@ std::pair<int, size_t> AlgoHandler::find_min_elem(const Row<int>& row, int min_v
 }
 
 
+void AlgoHandler::print_optim_way(size_t src_ind, size_t dest_ind, int dist)
+{
+    std::cout << "optimal back way is:" << std::endl; 
+    std::cout << src_ind << " ---> " << dest_ind << std::endl;
+    std::cout << "distance_between = " << dist;
+}
 
 
 void AlgoHandler::find_optim_back_way(size_t src_ind)
 {
+    std::vector<int> min_dists = d_algo();
+    size_t dest_ind = 0;
+    int cur_dist = weights[src_ind][dest_ind];
+    int min_dist = min_dists[1];
+    std::pair<int, size_t> min_pair{min_dists[1], 1};
 
-    if (weights[src_ind][0] != 0)
+    if (cur_dist != 0)
     {
-        init_table();
-        size_t dest_index = 0;
-        int min_val = weights[dest_index][dest_index];
-        const Row<int> tmp_row = weights[dest_index];
-
-        std::pair<int, size_t> res = find_min_elem(tmp_row, min_val);
-
-        if (weights[src_ind][dest_index] == res.first)
-            std::cout << src_ind << " ---> " << dest_index << ", " << "distance_between = "
-                                             << weights[src_ind][dest_index];
-
-        else if (weights[src_ind][dest_index] > res.first)
+        for (size_t i = 1; i < vec_size; ++i)
         {
+            int tmp = min_dists[i];
 
-            if (weights[src_ind][res.second] + res.first < weights[src_ind][dest_index])
+            if (tmp < min_dist)
             {
-                std::cout << src_ind << " ---> " << res.first << "," << "distance_between = "
-                                                 << weights[src_ind][res.second] << std::endl;
-
-                std::cout << res.first << " ---> " << dest_index << "," << "distance_between = "
-                          << weights[res.first][dest_index] << std::endl;
-            }
-            else
-                std::cout << src_ind << " ---> " << dest_index << ", " << "distance_between = "
-                          << weights[src_ind][dest_index];
+                min_pair.first = tmp;
+                min_pair.second = i;
+            }   
         }
-    }
+
+        if (min_pair.first < cur_dist)
+        {
+            if (min_pair.first + weights[src_ind][min_pair.second] < cur_dist)
+            {
+                print_optim_way(src_ind, min_pair.second, weights[src_ind][min_pair.second]);
+                print_optim_way(min_pair.second, dest_ind, min_pair.first);
+            }
+            else  
+                print_optim_way(src_ind, dest_ind, cur_dist);
+        }
+
+        else if (min_pair.first > cur_dist)
+            print_optim_way(src_ind, dest_ind, cur_dist);
+        
+    }    
 }
 
 std::pair<int, size_t> AlgoHandler::find_min_dist(size_t cur_index)
@@ -134,7 +210,7 @@ void AlgoHandler::optim_way()
 
     std::cout << "final location: " << cur_index << std::endl;
 
-    //find_optim_back_way(weights, vec_size, cur_index);
+    find_optim_back_way(cur_index);
 }
 
 
