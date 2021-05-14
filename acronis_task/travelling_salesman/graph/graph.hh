@@ -21,9 +21,9 @@ struct Edge final // rtor, junc1, junc2, voltage
   {
   }
 
-  double get_cur() const
+  double get_weight() const
   {
-    //return MX::is_zero(cur) ? 0.0 : cur;
+      return weight;
   }
 };
 
