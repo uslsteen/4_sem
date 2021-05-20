@@ -6,8 +6,19 @@ import numexpr as ne
 
 import gui as g
 
+## Initial constants
+
+X_MAX = 50
+Y_MAX = 50
+Z_MAX = 20
+
+## keyboard interrupt
+## fix tails of graph
+
 # Initialize figure with 4 3D subplots
 
+
+## Functon for creating two graph in different plots
 
 def subplots(func_vals):
 
@@ -17,8 +28,8 @@ def subplots(func_vals):
             [{'type': 'surface'}, {'type': 'surface'}]])
 
 
-    x=np.linspace(-50, 50, 100)
-    y=np.linspace(-50, 50, 100)
+    x=np.linspace(-X_MAX, X_MAX, 100)
+    y=np.linspace(-Y_MAX, Y_MAX, 100)
 
 
 
@@ -45,9 +56,9 @@ def subplots(func_vals):
 
     fig.update_layout(    
                         scene1 = dict(
-                        xaxis = dict(nticks=4, range=[-25,25],),
-                        yaxis = dict(nticks=4, range=[-25,25],),
-                        zaxis = dict(nticks=4, range=[-20,20],),),
+                        xaxis = dict(nticks=4, range=[-X_MAX/2, X_MAX/2],),
+                        yaxis = dict(nticks=4, range=[-Y_MAX/2,Y_MAX/2],),
+                        zaxis = dict(nticks=4, range=[-Z_MAX, Z_MAX],),),
         title_text='3D subplots with different colorscales',
         height=2000,
         width=2000
@@ -58,9 +69,9 @@ def subplots(func_vals):
 
     fig.update_layout(   
                         scene2 = dict(
-                        xaxis = dict(nticks=4, range=[-2,2.5],),
-                        yaxis = dict(nticks=4, range=[-2,2.5],),
-                        zaxis = dict(nticks=4, range=[-5,25],),),
+                        xaxis = dict(nticks=4, range=[-2.5,2.5],),
+                        yaxis = dict(nticks=4, range=[-2.5,2.5],),
+                        zaxis = dict(nticks=4, range=[-25,25],),),
         title_text='3D subplots with different colorscales',
 
     )
@@ -69,13 +80,19 @@ def subplots(func_vals):
 
 
 
+## Initial contants
 
+X_MAX = 10
+Y_MAX = 10
+Z_MAX = 20
+FREQ = 250
 
+## Function for creating two graph in one plot
 
 def line_by_line():
 
-    u=np.linspace(-10, 10, 250)
-    v=np.linspace(-10, 10, 250)
+    u=np.linspace(-X_MAX, X_MAX, FREQ)
+    v=np.linspace(-Y_MAX, Y_MAX, FREQ)
     u,v=np.meshgrid(u,v)
     u=u.flatten()
     v=v.flatten()
@@ -102,18 +119,18 @@ def line_by_line():
 
     fig.update_layout(  #scene1_aspectmode='auto',
                     scene1 = dict(
-                    xaxis = dict(nticks=4, range=[-5,5],),
-                    yaxis = dict(nticks=4, range=[-5,5],),
-                        zaxis = dict(nticks=4, range=[-20,20],),),
+                    xaxis = dict(nticks=4, range=[-X_MAX/2, X_MAX/2],),
+                    yaxis = dict(nticks=4, range=[-Y_MAX/2, Y_MAX/2],),
+                        zaxis = dict(nticks=4, range=[-Z_MAX, Z_MAX],),),
         title_text='3D subplots with different colorscales'
     )
 
 
     fig.update_layout(  #scene1_aspectmode='auto',
-                    xaxis = dict(nticks=4, range=[-5,5],),
-                    yaxis = dict(nticks=4, range=[-5,5],),
+                    xaxis = dict(nticks=4, range=[-X_MAX/2, X_MAX/2],),
+                    yaxis = dict(nticks=4, range=[-Y_MAX/2, Y_MAX/2],),
                     scene2 = dict(
-                        zaxis = dict(nticks=4, range=[-20,20],),),
+                        zaxis = dict(nticks=4, range=[-Z_MAX ,Z_MAX],),),
         title_text='3D subplots with different colorscales'
     )
 
