@@ -1,5 +1,26 @@
 ### Travelling salesman task by Acronis
 
-![GitHub repo size](https://img.shields.io/github/repo-size/uslsteen/4sem/tree/main/acronis_task/travelling_salesman?style=for-the-badge)
-![GitHub last commit](https://img.shields.io/github/last-commit/uslsteen/4sem/tree/main/acronis_task/travelling_salesman?color=red&style=for-the-badge)
-![GitHub lines](https://img.shields.io/tokei/lines/github/uslsteen/4sem/tree/main/acronis_task/travelling_salesman?style=for-the-badge)
+- Задача для поступления на кафедру теоретической и прикладной информатики, Acronis.
+
+- Данная задача не доведена до конца, т.к. автор выбрал найти свой путь решения, а не гуглить явно задачу коммивояжёра.
+
+
+### Правила сборки, работы с cmake.
+
+- Если у вас нет директории ``` build  ``` в проекте, то:
+
+``` mkdir build ```
+
+- Если есть директория, то:
+
+``` cd build ```
+
+``` rm -rf * ``` (in build!)
+
+- Затем:
+
+``` cmake .. ```
+
+``` make ```
+
+
