@@ -8,6 +8,8 @@ all: clean bld start
 
 start: frac_bldr.o frac.o main.o
 	$(CXX) $(BLD)/frac_bldr.out $(BLD)/frac.o $(BLD)/main.o -o $(BLD)/exec.out
+	
+	$(i execute .out file only for example)
 	./$(BLD)/exec.out
 
 clean:
