@@ -13,7 +13,7 @@ root.geometry("300x200")
 frame = Frame(root)
 
 
-""" creating conts """ 
+### containter creating 
 
 entries_info = {}
 

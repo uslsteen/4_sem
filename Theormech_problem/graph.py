@@ -15,6 +15,10 @@ Y_ARRAY_SIZE = 250
 X_ARRAY_LIM = 10
 Y_ARRAY_LIM = 10
 
+X_PLOT_LIM = 5
+Y_PLOT_LIM = 5
+Z_PLOT_LIM = 20
+
 ### Function for creating graph of Lyapunov function 
 
 def line_by_line():
@@ -43,23 +47,19 @@ def line_by_line():
     fig.add_trace(go.Scatter3d(x=x, y=y, z = z_deriv, mode = "lines", 
                             marker = dict(color = 'red', size = 10)))
 
-
-
-    fig.update_layout(  #scene1_aspectmode='auto',
+    fig.update_layout(
                     scene1 = dict(
-                    xaxis = dict(nticks=4, range=[-5,5],),
-                    yaxis = dict(nticks=4, range=[-5,5],),
-                        zaxis = dict(nticks=4, range=[-20, 20],),),
-        title_text='3D subplots with different colorscales'
-    )
+                    xaxis = dict(nticks=4, range=[-X_PLOT_LIM, X_PLOT_LIM],),
+                    yaxis = dict(nticks=4, range=[-Y_PLOT_LIM, Y_PLOT_LIM],),
+                        zaxis = dict(nticks=4, range=[-Z_PLOT_LIM, Z_PLOT_LIM],),),
+        title_text='3D subplots with different colorscales')
 
 
-    fig.update_layout(  #scene1_aspectmode='auto',
-                    xaxis = dict(nticks=4, range=[-5,5],),
-                    yaxis = dict(nticks=4, range=[-5,5],),
+    fig.update_layout(
+                    xaxis = dict(nticks=4, range=[-X_PLOT_LIM, X_PLOT_LIM],),
+                    yaxis = dict(nticks=4, range=[-Y_PLOT_LIM, Y_PLOT_LIM],),
                     scene2 = dict(
-                        zaxis = dict(nticks=4, range=[-20, 20],),),
-        title_text='3D subplots with different colorscales'
-    )
+                        zaxis = dict(nticks=4, range=[-Z_PLOT_LIM, Z_PLOT_LIM],),),
+        title_text='3D subplots with different colorscales')
 
     fig.show()
