@@ -23,6 +23,7 @@ system_map = {}
 func_vals = {}
 system_eqs = {}
 
+### Creating main user interface fo processing data
 
 def create_interface():
 
@@ -48,14 +49,14 @@ def create_entry(info, container, default_data = 0):
     container[info].grid(column = 1, row = cur_row - 1)
 
 
+### Function for processing data by user
+
 def data_process():
 
-    accept_button = Button(root, text="Вписать данные", command=get_data)
+    accept_button = Button(root, text="Старт", command=get_data)
     accept_button.grid(column = 1, row =len(func_map) + len(system_map) + 1)
- 
-    exit_button = Button(root, text = "Старт", command = grph.line_by_line)
-    exit_button.grid(column = 1, row =len(func_map) + len(system_map) + 2)
 
+### Function for getting data 
 
 def get_data():
 
@@ -82,6 +83,8 @@ def get_data():
 
         system_eqs[i] = eq_str
         i = i + 1
+
+    grph.line_by_line()
           
 
     

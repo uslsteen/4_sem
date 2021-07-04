@@ -1,5 +1,4 @@
 import gui
-import subplots as splts
 import graph as grph
 import math
 

@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
@@ -12,7 +14,6 @@ fig = make_subplots(
 
 x=np.linspace(-50, 50, 100)
 y=np.linspace(-50, 50, 100)
-
 
 
 xGrid, yGrid = np.meshgrid(y, x)
