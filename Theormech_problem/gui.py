@@ -1,90 +1,113 @@
 #!/usr/bin/python3
 
-from tkinter import Tk, RIGHT, BOTH, RAISED, END, BOTTOM
-from tkinter.ttk import Frame, Button, Style, Label, Entry
+from tkinter import Tk, RIGHT, BOTH, RAISED, END, BOTTOM, IntVar
+from tkinter.ttk import Frame, Button, Style, Label, Entry, Scale
 
 import graph as grph
 
-root = Tk()
 
-root.title('Анализ функции Ляпунова')
-root.geometry("300x200")
+class FuncAnalyzer():
 
-frame = Frame(root)
+    def __init__(self):
+
+        self.root = Tk()
+
+        self.root.title("Анализ функции Ляпунова")
+        self.root.geometry("300x200")
+
+        self.frame = Frame(self.root)
+
+        self.entries_info = list()
+
+        self.func_map = dict()
+        self.system_map = dict()
+
+        self.func_vals = list()
+        self.system_eqs = list()
+
+        self.cur_row = 1
+
+    def analise(self):
+
+        self.create_interface()
+        self.data_process()
+        self.root.mainloop()
+
+    def create_entry(self, info, container, default_data=0):
+
+        entry_info = Label(self.root, text=info, font=("Arial", 14))
+
+        container[info] = Entry(self.root)
+        container[info].insert(END, default_data)
+
+        ## cur_row = len(self.func_map) + len(self.system_map)
+
+        entry_info.grid(column=0, row=self.cur_row - 1)
+        container[info].grid(column=1, row=self.cur_row - 1)
+
+        self.cur_row += 1
 
 
-### containter creating 
+    def create_scale(self, info, default_val):
 
-entries_info = {}
+        scale = Scale(self.root, from_=0, to=100, command=self.onScale)
+        scale.grid(column= 1, row = self.cur_row - 1)
 
-func_map = {}
-system_map = {}
+        self.var = IntVar()
+        
+        info_label = Label(self.root, text=info, font=("Arial", 14))
+        info_label.grid(column= 0, row = self.cur_row)
 
-func_vals = {}
-system_eqs = {}
+        scale_label = Label(self.root, text = 0, textvariable= self.var)
+        scale_label.grid(column= 2, row = self.cur_row - 1)
+        self.cur_row += 1
 
-### Creating main user interface fo processing data
+    def onScale(self, val):
+        v = int(float(val))
+        self.var.set(v) 
 
-def create_interface():
+    # Creating main user interface fo processing data
 
-    create_entry('Коэфф. при x', func_map, 1)
-    create_entry('Коэфф. при y', func_map, 1)
-    create_entry('Степень при x', func_map, 2)
-    create_entry('Степень при y', func_map, 2)
+    def create_interface(self):
 
-    create_entry('dx/dt = ', system_map, '2*y ** 3 - x ** 5')
-    create_entry('dy/dt = ', system_map, '-x - y ** 3 + y ** 5')
+        self.create_entry('Коэфф. при x', self.func_map, 1)
+        self.create_entry('Коэфф. при y', self.func_map, 1)
+        self.create_entry('Степень при x', self.func_map, 2)
+        self.create_entry('Степень при y', self.func_map, 2)
 
-    
-def create_entry(info, container, default_data = 0):
+        self.create_entry('dx/dt = ', self.system_map, '2*y ** 3 - x ** 5')
+        self.create_entry('dy/dt = ', self.system_map, '-x - y ** 3 + y ** 5')
 
-    entry_info = Label(root, text = info, font = ("Arial", 14))
-    
-    container[info] = Entry(root)
-    container[info].insert(END, default_data)
+        self.create_scale("Масштаб по осям x, y:", 5)
+        self.create_scale("Масштаб по оси z:", 5)
 
-    cur_row = len(func_map) + len(system_map)
+    # Function for processing data by user
 
-    entry_info.grid(column = 0, row = cur_row - 1)
-    container[info].grid(column = 1, row = cur_row - 1)
+    def data_process(self):
 
+        accept_button = Button(self.root, text="Старт", command=self.get_data)
+        accept_button.grid(column=1, row = self.cur_row)
 
-### Function for processing data by user
+    # Function for getting data
 
-def data_process():
+    def get_data(self):
 
-    accept_button = Button(root, text="Старт", command=get_data)
-    accept_button.grid(column = 1, row =len(func_map) + len(system_map) + 1)
+        for info in self.func_map.keys():
+            info_str = self.func_map[info].get()
 
-### Function for getting data 
+            if len(info_str) == 0:
+                print("you should fill all theese gaps")
 
-def get_data():
+            val = float(info_str)
+            self.func_vals.append(val)
 
-    i = 0
+        for equal in self.system_map.keys():
 
-    for info in func_map.keys():
-        info_str = func_map[info].get()
+            eq_str = self.system_map[equal].get()
 
-        if len(info_str) == 0:
-            print("you should fill all theese gaps")
+            if len(eq_str) == 0:
+                print("you should fill all theese gaps")
 
-        val = float(info_str)
-        func_vals[i] = val
-        i = i + 1
+            self.system_eqs.append(eq_str)
 
-    i = 0
-
-    for equal in system_map.keys():
-    
-        eq_str = system_map[equal].get()
-
-        if len(eq_str) == 0:
-            print("you should fill all theese gaps")
-
-        system_eqs[i] = eq_str
-        i = i + 1
-
-    grph.line_by_line()
-          
-
-    
+        grph.GraphBuilder(self.func_vals, self.system_eqs)
