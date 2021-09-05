@@ -8,8 +8,8 @@ import numexpr as ne
 
 # Initial constants
 
-X_ARRAY_SIZE = 250
-Y_ARRAY_SIZE = 250
+X_ARRAY_SIZE = 200
+Y_ARRAY_SIZE = 200
 X_ARRAY_LIM = 10
 Y_ARRAY_LIM = 10
 
@@ -20,10 +20,13 @@ Z_PLOT_LIM = 20
 
 class GraphBuilder():
 
-    def __init__(self, func_vals, system_eqs):
+    def __init__(self, func_vals, system_eqs, limits_tuple):
 
         self.func_vals = func_vals
         self.system_eqs = system_eqs
+
+        self.X_PLOT_LIM, self.Y_PLOT_LIM = limits_tuple[0].get(), limits_tuple[0].get()
+        self.Z_PLOT_LIM = limits_tuple[1].get()
 
         self.line_by_line()
 
@@ -49,9 +52,9 @@ class GraphBuilder():
 
         fig.update_layout(
             scene1=dict(
-                xaxis=dict(nticks=4, range=[-X_PLOT_LIM, X_PLOT_LIM],),
-                yaxis=dict(nticks=4, range=[-Y_PLOT_LIM, Y_PLOT_LIM],),
-                zaxis=dict(nticks=4, range=[-Z_PLOT_LIM, Z_PLOT_LIM],),),
+                xaxis=dict(nticks=4, range=[-self.X_PLOT_LIM, self.X_PLOT_LIM],),
+                yaxis=dict(nticks=4, range=[-self.Y_PLOT_LIM, self.Y_PLOT_LIM],),
+                zaxis=dict(nticks=4, range=[-self.Z_PLOT_LIM, self.Z_PLOT_LIM],),),
             title_text='3D subplots with different colorscales')
 
     #
@@ -60,8 +63,8 @@ class GraphBuilder():
 
     def line_by_line(self):
 
-        u = np.linspace(-X_ARRAY_LIM, X_ARRAY_LIM, X_ARRAY_SIZE)
-        v = np.linspace(-Y_ARRAY_LIM, Y_ARRAY_LIM, Y_ARRAY_SIZE)
+        u = np.linspace(-2*self.X_PLOT_LIM, 2*self.X_PLOT_LIM, X_ARRAY_SIZE)
+        v = np.linspace(-2*self.Y_PLOT_LIM, 2*self.Y_PLOT_LIM, Y_ARRAY_SIZE)
         u, v = np.meshgrid(u, v)
         u = u.flatten()
         v = v.flatten()
